@@ -68,7 +68,6 @@ async function burn(id) {
 		// flame dies
 		setInterval(() => { char.remove() }, getRndInt(1000, 30000));
 
-		burnout()
 
 	}
 
