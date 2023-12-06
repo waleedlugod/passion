@@ -1,13 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
 
-* {
+*, ::before, ::after {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
 	font-family: 'JetBrains Mono', monospace;
 }
 
+body {
+	background: black;
+}
+
 #codeWrapper {
 	width: 100vw;
 	height: 100vh;
+}
+
+.char[data-fire="true"]::after {
+	content: "";
+	position: relative;
+	z-index: -1;
+	box-shadow:
+    -11px 0 5rem 1rem #ff9a00,
+    0 0 20rem 2rem #B3541E,
+    0 0 50rem 3rem #461111;
 }

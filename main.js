@@ -27,6 +27,7 @@ function createText(text) {
 
 		char.id = "char" + l;
 		char.className = "char";
+		char.setAttribute("data-fire", "false");
 		if (/\n/.test(text.charAt(l))) {
 			char.innerHTML = "<br/>"
 		} else if (/\t/.test(text.charAt(l))) {
@@ -55,11 +56,12 @@ async function burn(id) {
 	if (char.innerHTML !== "🔥") {
 
 		char.innerHTML = "🔥";
+		char.setAttribute("data-fire", "true");
 		console.log(id + " on fire 🔥")
 
 		await delay(200);
-		burn(char.nextSibling.id)
-		burn(char.previousSibling.id)
+		burn(char.nextElementSibling.id)
+		burn(char.previousElementSibling.id)
 
 		await delay(1000);
 		char.remove()
