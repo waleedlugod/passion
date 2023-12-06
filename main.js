@@ -14,8 +14,10 @@ function init() {
 	.then(res => res.text())
 	.then(text => createText(text));
 
+	document.onmouseup = burnSelected
 }
 
+// creates element where all characters are inside a span
 function createText(text) {
 
 	const codeWrapper = document.createElement("div");
@@ -28,6 +30,8 @@ function createText(text) {
 		char.id = "char" + l;
 		char.className = "char";
 		char.setAttribute("data-fire", "false");
+
+		// conserve spacing, new lines, and tabs
 		if (/\n/.test(text.charAt(l))) {
 			char.innerHTML = "<br/>"
 		} else if (/\t/.test(text.charAt(l))) {
@@ -38,9 +42,7 @@ function createText(text) {
 			char.innerHTML = text.charAt(l)
 		}
 
-		char.addEventListener("click", () => {
-			burn(char.id)
-		})
+		char.onclick = () => burn(char.id)
 
 		codeWrapper.appendChild(char);
 	}
@@ -49,6 +51,7 @@ function createText(text) {
 
 }
 
+// replaces the character with 🔥
 async function burn(id) {
 
 	const char = document.getElementById(id);
@@ -57,20 +60,46 @@ async function burn(id) {
 
 		char.innerHTML = "🔥";
 		char.setAttribute("data-fire", "true");
-		console.log(id + " on fire 🔥")
 
-		await delay(200);
-		burn(char.nextElementSibling.id)
-		burn(char.previousElementSibling.id)
+		// burn nearby chars
+		await delay(getRndInt(0, 2000));
+		if (char.nextElementSibling) { burn(char.nextElementSibling.id) }
+		if (char.previousElementSibling) { burn(char.previousElementSibling.id) }
 
-		await delay(1000);
+		// flame dies
+		await delay(getRndInt(3000, 10000));
 		char.remove()
-		console.log(id + " burnt ⚱️")
+
+		burnout()
 
 	}
 
 }
 
+// burn chars when selected with cursor
+function burnSelected() {
+
+	const selection = window.getSelection();
+	if (!selection.rangeCount) return;
+
+	const range = selection.getRangeAt(0);
+
+	range.cloneContents()
+		.querySelectorAll('.char')
+		.forEach(e => burn(e.id));
+
+}
+
 function getRndInt(min,max) {
+
 	return Math.floor(Math.random() * (max - min)) + min;
+
+}
+
+// closes the window if no more chars
+function burnout() {
+
+	const codeWrapper = document.getElementById("codeWrapper")
+	if (codeWrapper.childElementCount <= 0) { close() }
+
 }
