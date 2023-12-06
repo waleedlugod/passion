@@ -11,11 +11,6 @@ body {
 	background: black;
 }
 
-#codeWrapper {
-	width: 100vw;
-	height: 100vh;
-}
-
 .char[data-fire="true"]::after {
 	content: "";
 	position: relative;
