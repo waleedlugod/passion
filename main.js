@@ -1,5 +1,3 @@
-const delay = ms => new Promise(res => setTimeout(res, ms));
-
 window.onload = () => {
 
 	init()
@@ -62,13 +60,13 @@ async function burn(id) {
 		char.setAttribute("data-fire", "true");
 
 		// burn nearby chars
-		await delay(getRndInt(0, 2000));
-		if (char.nextElementSibling) { burn(char.nextElementSibling.id) }
-		if (char.previousElementSibling) { burn(char.previousElementSibling.id) }
+		setInterval(() => {
+			if (char.nextElementSibling) { burn(char.nextElementSibling.id) }
+			if (char.previousElementSibling) { burn(char.previousElementSibling.id) }
+		}, getRndInt(0, 1000));
 
 		// flame dies
-		await delay(getRndInt(3000, 10000));
-		char.remove()
+		setInterval(() => { char.remove() }, getRndInt(1000, 30000));
 
 		burnout()
 
@@ -76,7 +74,7 @@ async function burn(id) {
 
 }
 
-// burn chars when selected with cursor
+// burn chars selected with cursor
 function burnSelected() {
 
 	const selection = window.getSelection();
@@ -90,16 +88,16 @@ function burnSelected() {
 
 }
 
-function getRndInt(min,max) {
-
-	return Math.floor(Math.random() * (max - min)) + min;
-
-}
-
 // closes the window if no more chars
 function burnout() {
 
 	const codeWrapper = document.getElementById("codeWrapper")
 	if (codeWrapper.childElementCount <= 0) { close() }
+
+}
+
+function getRndInt(min,max) {
+
+	return Math.floor(Math.random() * (max - min)) + min;
 
 }
